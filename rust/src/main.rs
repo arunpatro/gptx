@@ -70,12 +70,13 @@ fn main() -> Result<()> {
 
     // setup
     let tokenizer = Tokenizer::from_file("gpt2_tokenizer.json")?;
+    println!("Loading model from: {:?}", model_path);
     let start = Instant::now();
     let model = nn::GPT2::from_json(model_path);
     let model_load_time = start.elapsed();
 
     let prompt = "The answer to life, the universe, and everything is";
-    let encoding = tokenizer.encode(prompt, false)?;
+    // let encoding = tokenizer.encode(prompt, false)?;
     let tokens = vec![464, 3280, 284, 1204, 11, 262, 6881, 11, 290, 2279, 318];
     println!("[input]: {:?}", prompt);
     // println!("logits: {:?}", model.forward(&tokens));
