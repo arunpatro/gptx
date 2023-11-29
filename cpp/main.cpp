@@ -45,7 +45,7 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    omp_set_num_threads(num_threads);
+    omp_set_num_threads(max_threads);
     printf("num threads: %d\n", max_threads);
     printf("num tokens: %d\n", max_tokens);
     printf("==========================\n");
