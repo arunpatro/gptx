@@ -47,12 +47,12 @@ int main(int argc, char* argv[]) {
 
     printf("num threads: %d\n", max_threads);
     printf("num tokens: %d\n", max_tokens);
-    printf("==========================");
+    printf("==========================\n");
 
     // time this part 
     std::cout << "Loading model from " << model_path << std::endl;
     auto start = std::chrono::high_resolution_clock::now();
-    auto gpt2 = GPT2::from_json("/Users/arunpatro/multicore-project/gptx/python/model_weights.json");
+    auto gpt2 = GPT2::from_json(model_path);
     auto end = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> duration = end - start;
 
