@@ -6,6 +6,7 @@
 #include "utils.h"
 #include <getopt.h>
 #include <chrono>
+#include <omp.h>
 
 int main(int argc, char* argv[]) {
     // configs
@@ -44,7 +45,7 @@ int main(int argc, char* argv[]) {
         }
     }
 
-
+    omp_set_num_threads(num_threads);
     printf("num threads: %d\n", max_threads);
     printf("num tokens: %d\n", max_tokens);
     printf("==========================\n");
