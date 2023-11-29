@@ -24,7 +24,7 @@ fn main() -> Result<()> {
                 .long("threads")
                 .help("Sets the number of threads")
                 .required(false)
-                .default_value("None"),
+                .default_value("1"),
         )
         .arg(
             Arg::new("model_path")
@@ -43,16 +43,12 @@ fn main() -> Result<()> {
         .parse::<usize>()
         .expect("Invalid input for max_tokens");
 
-    let max_threads_str = matches.get_one::<String>("max_threads").unwrap();
-    let max_threads = if max_threads_str == "None" {
-        None
-    } else {
-        Some(
-            max_threads_str
-                .parse::<usize>()
-                .expect("Invalid input for max_threads"),
-        )
-    };
+    let max_threads_str = matches
+        .get_one::<String>("max_threads")
+        .expect("Argument max_threads missing");
+    let max_threads = max_threads_str
+        .parse::<usize>()
+        .expect("Invalid input for max_threads");
 
     let model_path = matches.get_one::<String>("model_path").unwrap();
 
@@ -61,12 +57,11 @@ fn main() -> Result<()> {
     println!("num tokens: {:?}", max_tokens);
     println!("==========================");
 
-    if let Some(num_threads) = max_threads {
-        ThreadPoolBuilder::new()
-            .num_threads(num_threads)
-            .build_global()
-            .unwrap();
-    }
+    // setup
+    ThreadPoolBuilder::new()
+        .num_threads(max_threads)
+        .build_global()
+        .unwrap();
 
     // setup
     let tokenizer = Tokenizer::from_file("gpt2_tokenizer.json")?;
