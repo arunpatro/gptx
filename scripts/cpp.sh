@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Define the values for 't' to iterate over
-values=(1 2 4 8 16 32)
+values=(1 2 4 8 16 32 64)
 
 # Path to the model weights (adjust as needed)
 MODEL_PATH="../python/model_weights.json"
