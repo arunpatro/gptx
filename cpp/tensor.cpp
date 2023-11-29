@@ -1,5 +1,6 @@
 #include "tensor.h"
-
+#include <cmath>
+#include <tuple>
 #include <cassert>
 #include <iomanip>
 #include <iostream>

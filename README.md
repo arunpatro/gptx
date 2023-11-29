@@ -3,6 +3,11 @@ This is a barebones implemenation of GPT-2 in Rust and C++. We also implement a 
 
 ## Install
 
+0. First setup the enviroment on Crunchy1.
+```bash
+module load cmake-3
+module load python
+
 1. First download the weights using the code in python folder.
 ```bash
 pip install -r requirements.txt
@@ -29,4 +34,28 @@ make
 ## Details
 We experiment with parallelizing the tensor multiplications using multi-threading. We use the rayon library for the rust implementation and the OpenMP library for the C++ implementation.
 
-## Results
+
+
+
+## Experimental Setup
+- simulator used - crunchy1
+- specs
+- very reproduceable code 
+
+
+## Results and Analysis
+
+
+## Conclusions
+3 points max
+- memory usage
+- speed
+- where is the bottleneck
+
+## References
+- pytorch
+- transformers
+- candle
+- jax
+- simd
+- nanogpt

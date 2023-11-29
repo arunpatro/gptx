@@ -221,8 +221,8 @@ impl GPT2 {
         }
     }
 
-    pub fn from_json() -> Self {
-        let wmap = utils::load_model_weights("model_weights.json").unwrap();
+    pub fn from_json(json_path: &str) -> Self {
+        let wmap = utils::load_model_weights(json_path).unwrap();
         let wte_weight = wmap.get("wte.weight").unwrap();
         let wte = Embedding::new(wte_weight.clone());
         let wpe_weight = wmap.get("wpe.weight").unwrap();

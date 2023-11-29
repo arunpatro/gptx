@@ -13,18 +13,26 @@ fn main() -> Result<()> {
         .about("GPT2 Inference in Rust")
         .arg(
             Arg::new("max_tokens")
-                .short('t')
+                .short('n')
                 .long("tokens")
                 .help("Sets the max tokens")
                 .default_value("20"),
         )
         .arg(
             Arg::new("max_threads")
-                .short('h')
+                .short('t')
                 .long("threads")
                 .help("Sets the number of threads")
                 .required(false)
                 .default_value("None"),
+        )
+        .arg(
+            Arg::new("model_path")
+                .short('m')
+                .long("model_path")
+                .help("The path to the model weights in json")
+                .required(false)
+                .default_value("model_weights.json"),
         )
         .get_matches();
 
@@ -46,6 +54,8 @@ fn main() -> Result<()> {
         )
     };
 
+    let model_path = matches.get_one::<String>("model_path").unwrap();
+
     // configs
     println!("num threads: {:?}", max_threads);
     println!("num tokens: {:?}", max_tokens);
@@ -61,7 +71,7 @@ fn main() -> Result<()> {
     // setup
     let tokenizer = Tokenizer::from_file("gpt2_tokenizer.json")?;
     let start = Instant::now();
-    let model = nn::GPT2::from_json();
+    let model = nn::GPT2::from_json(model_path);
     let model_load_time = start.elapsed();
 
     let prompt = "The answer to life, the universe, and everything is";
