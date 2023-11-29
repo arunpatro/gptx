@@ -5,6 +5,7 @@
 #include "einops.h"
 #include "tensor.h"
 #include "utils.h"
+#include <cmath>
 
 Linear::Linear(const Tensor& weight, const Tensor& bias) : weight(weight), bias(bias) {}
 Tensor Linear::operator()(const Tensor& x) const {
@@ -50,7 +51,11 @@ Tensor MLP::operator()(const Tensor& x) const {
 CausalSelfAttention::CausalSelfAttention(const Linear& fc_qkv, const Linear& fc_o) : fc_qkv(fc_qkv), fc_o(fc_o) {}
 Tensor CausalSelfAttention::operator()(const Tensor& x) const {
     Tensor qkv = fc_qkv(x);
-    auto [q, k, v] = qkv.split3(2);
+
+    auto qkv_split = qkv.split3(2);
+    Tensor q = std::get<0>(qkv_split);
+    Tensor k = std::get<1>(qkv_split);
+    Tensor v = std::get<2>(qkv_split);
 
     size_t B = q.shape[0];
     size_t T = q.shape[1];
@@ -60,13 +65,7 @@ Tensor CausalSelfAttention::operator()(const Tensor& x) const {
     k = k.reshape({B, T, 12, 64}).permute_multihead();
     v = v.reshape({B, T, 12, 64}).permute_multihead();
 
-    // std::cout << "q: " << q << std::endl;
-    // std::cout << "k: " << k << std::endl;
-    // std::cout << "v: " << v << std::endl;
-    // std::cout << "==========" << std::endl;
-
-    Tensor logits = einsum("b h i d, b h j d -> b h i j", q, k).div_scalar(sqrt(64.0));
-    // std::cout << "logits: " << logits << std::endl;
+    Tensor logits = einsum("b h i d, b h j d -> b h i j", q, k).div_scalar(std::sqrt(64.0));
     // causal mask
     for (size_t i = 0; i < logits.shape[0]; i++) {
         for (size_t j = 0; j < logits.shape[1]; j++) {
