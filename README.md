@@ -1,3 +1,6 @@
+## About
+This is a barebones implemenation of GPT-2 in Rust and C++. We also implement a minimal Tensor Library for the same. Currently, this only supports inference on the GPT-2 model with float32 weights on CPU. 
+
 ## Install
 
 1. First download the weights using the code in python folder.
@@ -22,3 +25,8 @@ cmake -DCMAKE_BUILD_TYPE=Release ..
 make
 ./gptxx -t 4 -n 20
 ```
+
+## Details
+We experiment with parallelizing the tensor multiplications using multi-threading. We use the rayon library for the rust implementation and the OpenMP library for the C++ implementation.
+
+## Results
