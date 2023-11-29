@@ -2,7 +2,7 @@
 
 #include <cassert>
 #include <stdexcept>
-// #include <omp.h>
+#include <omp.h>
 
 Tensor einsum(const std::string& expr, const Tensor& t1, const Tensor& t2) {
     if (expr == "b h i d, b h j d -> b h i j") {
@@ -39,7 +39,7 @@ Tensor einsum(const std::string& expr, const Tensor& t1, const Tensor& t2) {
         //         }
         //     }
         // }
-        // #pragma omp parallel for
+        #pragma omp parallel for
         for (size_t index = 0; index < B * H * I * J; ++index) {
             size_t b = index / (H * I * J);
             size_t h = (index / (I * J)) % H;
@@ -91,7 +91,7 @@ Tensor einsum(const std::string& expr, const Tensor& t1, const Tensor& t2) {
         //         }
         //     }
         // }
-        // #pragma omp parallel for
+        #pragma omp parallel for
         for (size_t index = 0; index < B * H * I * D; ++index) {
             size_t b = index / (H * I * D);
             size_t h = (index / (I * D)) % H;
@@ -135,7 +135,7 @@ Tensor einsum(const std::string& expr, const Tensor& t1, const Tensor& t2) {
         //         }
         //     }
         // }
-        // #pragma omp parallel for
+        #pragma omp parallel for
         for (size_t index = 0; index < B * I * K; ++index) {
             size_t b = index / (I * K);
             size_t i = (index / K) % I;
