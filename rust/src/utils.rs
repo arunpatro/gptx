@@ -4,13 +4,6 @@ use std::collections::HashMap;
 use std::error::Error;
 use std::fs;
 
-// CONSTANTS
-const N_EMBD: usize = 768;
-const N_LAYER: usize = 12;
-const N_HEAD: usize = 4;
-const N_CTX: usize = 1024;
-const N_VOCAB: usize = 50257;
-
 // Define a struct to hold the parameter data
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Weight {

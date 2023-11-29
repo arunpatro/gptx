@@ -97,9 +97,7 @@ impl MLP {
 
     pub fn forward(&self, input: &Tensor) -> Tensor {
         let x = self.fc1.forward(input);
-        // println!("after fc1: {:?}", x);
         let x = ops::gelu(&x);
-        // println!("after gelu: {:?}", x);
         let x = self.fc2.forward(&x);
         x
     }
@@ -131,13 +129,8 @@ impl CausalSelfAttention {
         let k = k.reshape(vec![B, T, 12, 64]).permute_multihead();
         let v = v.reshape(vec![B, T, 12, 64]).permute_multihead();
 
-        // println!("q: {:?}", q);
-        // println!("k: {:?}", k);
-        // println!("v: {:?}", v);
-        // println!("============");
         let att = einsum("b h i d, b h j d -> b h i j", &q, &k);
         let mut att = att.div_scalar((k.shape[3] as f32).sqrt());
-        // println!("logits: {:?}", att);
 
         // causal mask
         for i in 0..att.shape[0] {
@@ -158,13 +151,9 @@ impl CausalSelfAttention {
 
         att = ops::softmax(&att, 3);
         let y = einsum("b h i j, b h j d -> b h i d", &att, &v);
-        // println!("y after einsum: {:?}", y);
         let y = y.permute_multihead().reshape(vec![B, T, 768]);
-        // println!("y after permute: {:?}", y);
-        // projection layer
         let output = einsum("b i j, j k -> b i k", &y, &self.fc_o.weight)
             .add(&self.fc_o.bias.reshape(vec![1, 1, self.fc_o.bias.shape[0]]));
-        // println!("output: {:?}", output);
         output
     }
 }
@@ -183,14 +172,10 @@ impl Block {
 
     pub fn forward(&self, input: &Tensor) -> Tensor {
         let x = self.ln1.forward(input);
-        // println!("after ln1: {:?}", x);
         let x = self.csa.forward(&x);
-        // println!("after csa: {:?}", x);
         let x = x.add(input);
         let x1 = self.ln2.forward(&x);
-        // println!("after ln2: {:?}", x1);
         let x1 = self.mlp.forward(&x1);
-        // println!("after mlp: {:?}", x1);
         let output = x.add(&x1);
         output
     }
@@ -266,18 +251,13 @@ impl GPT2 {
         let input = Tensor::new(vec![1, tokens.len()], tokens);
 
         let x = self.wte.forward(&input);
-        // println!("after wte: {:?}", x);
         let pos = Tensor::arange(0, input.shape[1], 1).reshape(vec![1, input.shape[1]]);
         let pos_emb = self.wpe.forward(&pos);
-        // println!("after wpe: {:?}", pos_emb);
         let mut x = x.add(&pos_emb);
-        // println!("after add: {:?}", x);
         for block in &self.blocks {
             x = block.forward(&x);
-            // println!("after block: {:?}", x);
         }
         let x = self.ln_f.forward(&x);
-        // println!("after ln_f: {:?}", x);
         let x_slice = ops::last_token_slice(&x);
         let logits = self.lm_head.forward(&x_slice);
         logits

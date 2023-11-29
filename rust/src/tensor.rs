@@ -371,8 +371,7 @@ impl Tensor {
                 }
             }
             output
-        }
-        else {
+        } else {
             panic!("Invalid shapes for addition")
         }
     }
@@ -431,8 +430,7 @@ impl Tensor {
                 }
             }
             output
-        }
-        else {
+        } else {
             panic!("Invalid shapes for subtraction")
         }
     }

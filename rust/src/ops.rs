@@ -32,7 +32,6 @@ pub fn softmax(x: &Tensor, dim: usize) -> Tensor {
         for j in 0..x.shape[1] {
             for k in 0..x.shape[2] {
                 for l in 0..x.shape[3] {
-
                     output[vec![i, j, k, l]] =
                         x_exp[vec![i, j, k, l]] / x_exp_sum[vec![i, j, k, 0]];
                 }
@@ -72,6 +71,11 @@ pub fn argmax(logits: &Tensor) -> usize {
 pub fn assert_approx_eq(a: &[f32], b: &[f32], epsilon: f32) {
     assert_eq!(a.len(), b.len(), "Vectors are of different lengths");
     for (x, y) in a.iter().zip(b.iter()) {
-        assert!((x - y).abs() < epsilon, "Values {:?} and {:?} are not approximately equal", x, y);
+        assert!(
+            (x - y).abs() < epsilon,
+            "Values {:?} and {:?} are not approximately equal",
+            x,
+            y
+        );
     }
 }
