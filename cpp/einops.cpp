@@ -1,6 +1,7 @@
 #include "einops.h"
 
 #include <cassert>
+#include <stdexcept>
 
 Tensor einsum(const std::string& expr, const Tensor& t1, const Tensor& t2) {
     if (expr == "b h i d, b h j d -> b h i j") {
