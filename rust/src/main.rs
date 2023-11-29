@@ -1,7 +1,5 @@
 use clap::{Arg, Command};
 use gptx::nn;
-use gptx::ops;
-use gptx::tensor::Tensor;
 use rayon::ThreadPoolBuilder;
 use std::time::Instant;
 use tokenizers::{Result, Tokenizer};
@@ -9,7 +7,7 @@ use tokenizers::{Result, Tokenizer};
 fn main() -> Result<()> {
     let matches = Command::new("GPT2 Inference in Rust")
         .version("0.1.0")
-        .author("Arun Patro, Olivia")
+        .author("Arun Patro, Olivia Xie")
         .about("GPT2 Inference in Rust")
         .arg(
             Arg::new("max_tokens")
@@ -71,10 +69,8 @@ fn main() -> Result<()> {
     let model_load_time = start.elapsed();
 
     let prompt = "The answer to life, the universe, and everything is";
-    // let encoding = tokenizer.encode(prompt, false)?;
     let tokens = vec![464, 3280, 284, 1204, 11, 262, 6881, 11, 290, 2279, 318];
     println!("[input]: {:?}", prompt);
-    // println!("logits: {:?}", model.forward(&tokens));
 
     // inference
     let start = Instant::now();
@@ -106,6 +102,7 @@ fn main() -> Result<()> {
     Ok(())
 }
 
+#[cfg(test)]
 mod tests {
     use super::*;
 
