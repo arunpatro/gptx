@@ -23,7 +23,9 @@ WeightsMap loadModelWeights(const std::string& file_path) {
     }
 
     WeightsMap weights_map;
-    for (auto& [name, param] : param_map.items()) {
+    for (auto it = param_map.items().begin(); it != param_map.items().end(); ++it) {
+        const std::string& name = it.key();
+        const auto& param = it.value();
         std::vector<size_t> shape;
         for (const auto& val : param["shape"]) {
             shape.push_back(val.get<size_t>());
