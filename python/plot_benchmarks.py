@@ -1,8 +1,7 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 
-
-threads = [1, 2, 4, 8, 16, 32, 64, 128, 256]
+threads = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512]
 
 rust_data = []
 for t in threads:
@@ -17,7 +16,6 @@ for t in threads:
         data = f.readlines()
     vals = [t] + [float(line.strip().split(" ")[-1]) for line in data[-4:]]
     cpp_data.append(vals)
-    
     
 df_rust = pd.DataFrame(rust_data, columns=["threads", "model load time", "inference time", "seconds-per-token", "tokens-per-second"])
 df_cpp = pd.DataFrame(cpp_data, columns=["threads", "model load time", "inference time", "seconds-per-token", "tokens-per-second"])
